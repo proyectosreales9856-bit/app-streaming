@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
-const { initDatabase } = require('./database');
+const { connectDatabase } = require('./database');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -24,12 +24,9 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-// Inicializar base de datos y luego iniciar servidor
-initDatabase().then(() => {
+// Conectar a MongoDB y luego iniciar servidor
+connectDatabase().then(() => {
   app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`);
   });
-}).catch(err => {
-  console.error('Error al inicializar la base de datos:', err);
-  process.exit(1);
 });

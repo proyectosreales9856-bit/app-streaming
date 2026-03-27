@@ -1,75 +1,17 @@
-const initSqlJs = require('sql.js');
-const fs = require('fs');
-const path = require('path');
+const mongoose = require('mongoose');
 
-const dbPath = path.join(__dirname, '..', 'database.sqlite');
+// URI de MongoDB - se puede configurar via variable de entorno
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost:27017/streaming';
 
-let db = null;
-
-// Inicializar la base de datos
-async function initDatabase() {
-  const SQL = await initSqlJs();
-  
-  // Cargar base de datos existente o crear nueva
-  if (fs.existsSync(dbPath)) {
-    const buffer = fs.readFileSync(dbPath);
-    db = new SQL.Database(buffer);
-  } else {
-    db = new SQL.Database();
-  }
-
-  // Activar foreign keys
-  db.run('PRAGMA foreign_keys = ON');
-
-  // Crear tablas
-  db.run(`
-    CREATE TABLE IF NOT EXISTS tipos_cuenta (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      nombre TEXT NOT NULL,
-      precio_tienda REAL NOT NULL DEFAULT 0,
-      precio_publico REAL NOT NULL DEFAULT 0,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP
-    )
-  `);
-
-  db.run(`
-    CREATE TABLE IF NOT EXISTS ventas (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      numero_orden INTEGER NOT NULL,
-      tipo_cuenta_id INTEGER NOT NULL,
-      precio_tienda REAL NOT NULL,
-      precio_publico REAL NOT NULL,
-      whatsapp TEXT NOT NULL,
-      fecha_expiracion DATE NOT NULL,
-      renovable BOOLEAN NOT NULL DEFAULT 1,
-      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-      FOREIGN KEY (tipo_cuenta_id) REFERENCES tipos_cuenta(id) ON DELETE CASCADE
-    )
-  `);
-
-  // Guardar la base de datos
-  saveDatabase();
-  
-  console.log('Base de datos SQLite inicializada');
-  return db;
-}
-
-// Guardar la base de datos en disco
-function saveDatabase() {
-  if (db) {
-    const data = db.export();
-    const buffer = Buffer.from(data);
-    fs.writeFileSync(dbPath, buffer);
+// Conectar a MongoDB
+async function connectDatabase() {
+  try {
+    await mongoose.connect(MONGODB_URI);
+    console.log('Conectado a MongoDB Atlas');
+  } catch (error) {
+    console.error('Error al conectar a MongoDB:', error.message);
+    process.exit(1);
   }
 }
 
-// Obtener la instancia de la base de datos
-function getDb() {
-  return db;
-}
-
-module.exports = {
-  initDatabase,
-  getDb,
-  saveDatabase
-};
+module.exports = { connectDatabase };
