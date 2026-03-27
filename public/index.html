@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Ventas de Streaming</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Sistema de Ventas de Streaming</h1>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab active" data-tab="ventas">Ventas</button>
+            <button class="tab" data-tab="cuentas">Tipos de Cuenta</button>
+        </nav>
+
+        <!-- Pestaña de Ventas -->
+        <section id="ventas" class="tab-content active">
+            <div class="form-section">
+                <h2 id="venta-form-title">Agregar Venta</h2>
+                <form id="venta-form">
+                    <input type="hidden" id="venta-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="numero-orden">Número de Orden</label>
+                            <input type="number" id="numero-orden" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="tipo-cuenta">Tipo de Cuenta</label>
+                            <select id="tipo-cuenta" required>
+                                <option value="">Seleccionar tipo...</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="precio-tienda">Precio Tienda</label>
+                            <input type="number" step="0.01" id="precio-tienda" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="precio-publico">Precio Público</label>
+                            <input type="number" step="0.01" id="precio-publico" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="whatsapp">WhatsApp</label>
+                            <input type="text" id="whatsapp" placeholder="+52 123 456 7890" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha-expiracion">Fecha de Expiración</label>
+                            <input type="date" id="fecha-expiracion" required>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="renovable">
+                            <label for="renovable">Cuenta Renovable</label>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" id="cancelar-venta">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-section">
+                <h2>Lista de Ventas</h2>
+                <table id="ventas-table">
+                    <thead>
+                        <tr>
+                            <th>Orden</th>
+                            <th>Tipo de Cuenta</th>
+                            <th>P. Tienda</th>
+                            <th>P. Público</th>
+                            <th>WhatsApp</th>
+                            <th>Expira</th>
+                            <th>Renovable</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ventas-tbody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Pestaña de Tipos de Cuenta -->
+        <section id="cuentas" class="tab-content">
+            <div class="form-section">
+                <h2 id="cuenta-form-title">Agregar Tipo de Cuenta</h2>
+                <form id="cuenta-form">
+                    <input type="hidden" id="cuenta-id">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre-cuenta">Nombre de la Cuenta</label>
+                            <input type="text" id="nombre-cuenta" placeholder="Netflix, Spotify, etc." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cuenta-precio-tienda">Precio Tienda (Sugerencia)</label>
+                            <input type="number" step="0.01" id="cuenta-precio-tienda" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cuenta-precio-publico">Precio Público (Sugerencia)</label>
+                            <input type="number" step="0.01" id="cuenta-precio-publico" required>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Guardar</button>
+                        <button type="button" class="btn btn-secondary" id="cancelar-cuenta">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="table-section">
+                <h2>Lista de Tipos de Cuenta</h2>
+                <table id="cuentas-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>P. Tienda</th>
+                            <th>P. Público</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="cuentas-tbody">
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
