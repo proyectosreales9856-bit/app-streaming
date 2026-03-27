@@ -69,8 +69,8 @@ function setupEventListeners() {
 
 // Auto-fill precios cuando se selecciona tipo de cuenta
 function autoFillPrecios() {
-    const selectedId = parseInt(tipoCuentaSelect.value);
-    const tipoCuenta = tiposCuenta.find(tc => tc.id === selectedId);
+    const selectedId = tipoCuentaSelect.value;
+    const tipoCuenta = tiposCuenta.find(tc => tc._id === selectedId);
     
     if (tipoCuenta) {
         precioTiendaInput.value = tipoCuenta.precio_tienda;
@@ -99,7 +99,7 @@ function populateTipoCuentaSelect() {
     
     tiposCuenta.forEach(tc => {
         const option = document.createElement('option');
-        option.value = tc.id;
+        option.value = tc._id;
         option.textContent = tc.nombre;
         tipoCuentaSelect.appendChild(option);
     });
@@ -136,13 +136,13 @@ function renderCuentasTable(cuentas) {
 
     cuentasTbody.innerHTML = cuentas.map(cuenta => `
         <tr>
-            <td>${cuenta.id}</td>
+            <td>${cuenta._id.substring(0, 8)}...</td>
             <td>${escapeHtml(cuenta.nombre)}</td>
             <td>$${formatNumber(cuenta.precio_tienda)}</td>
             <td>$${formatNumber(cuenta.precio_publico)}</td>
             <td class="action-buttons">
-                <button class="btn btn-success" onclick="editCuenta(${cuenta.id})">Editar</button>
-                <button class="btn btn-danger" onclick="deleteCuenta(${cuenta.id})">Eliminar</button>
+                <button class="btn btn-success" onclick="editCuenta('${cuenta._id}')">Editar</button>
+                <button class="btn btn-danger" onclick="deleteCuenta('${cuenta._id}')">Eliminar</button>
             </td>
         </tr>
     `).join('');
@@ -189,7 +189,7 @@ async function editCuenta(id) {
         const response = await fetch(`${API_URL}/cuentas/${id}`);
         const cuenta = await response.json();
         
-        cuentaIdInput.value = cuenta.id;
+        cuentaIdInput.value = cuenta._id;
         nombreCuentaInput.value = cuenta.nombre;
         cuentaPrecioTiendaInput.value = cuenta.precio_tienda;
         cuentaPrecioPublicoInput.value = cuenta.precio_publico;
@@ -269,8 +269,8 @@ function renderVentasTable(ventas) {
                 </span>
             </td>
             <td class="action-buttons">
-                <button class="btn btn-success" onclick="editVenta(${venta.id})">Editar</button>
-                <button class="btn btn-danger" onclick="deleteVenta(${venta.id})">Eliminar</button>
+                <button class="btn btn-success" onclick="editVenta('${venta._id}')">Editar</button>
+                <button class="btn btn-danger" onclick="deleteVenta('${venta._id}')">Eliminar</button>
             </td>
         </tr>
     `).join('');
@@ -320,14 +320,14 @@ async function editVenta(id) {
         const response = await fetch(`${API_URL}/ventas/${id}`);
         const venta = await response.json();
         
-        ventaIdInput.value = venta.id;
+        ventaIdInput.value = venta._id;
         numeroOrdenInput.value = venta.numero_orden;
         tipoCuentaSelect.value = venta.tipo_cuenta_id;
         precioTiendaInput.value = venta.precio_tienda;
         precioPublicoInput.value = venta.precio_publico;
         whatsappInput.value = venta.whatsapp;
         fechaExpiracionInput.value = venta.fecha_expiracion;
-        renovableCheckbox.checked = venta.renovable === 1;
+        renovableCheckbox.checked = venta.renovable;
         
         ventaFormTitle.textContent = 'Editar Venta';
         numeroOrdenInput.focus();
