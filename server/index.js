@@ -24,9 +24,19 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '..', 'public', 'index.html'));
 });
 
-// Conectar a MongoDB y luego iniciar servidor
-connectDatabase().then(() => {
-  app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`);
-  });
+// Ruta de salud para Render
+app.get('/health', (req, res) => {
+  res.status(200).json({ status: 'ok' });
 });
+
+// Conectar a MongoDB y luego iniciar servidor
+connectDatabase()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Servidor corriendo en puerto ${PORT}`);
+    });
+  })
+  .catch(err => {
+    console.error('Error al iniciar servidor:', err.message);
+    process.exit(1);
+  });
