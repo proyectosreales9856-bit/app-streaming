@@ -283,7 +283,7 @@ async function handleVentaSubmit(e) {
     const id = ventaIdInput.value;
     const data = {
         numero_orden: parseInt(numeroOrdenInput.value),
-        tipo_cuenta_id: parseInt(tipoCuentaSelect.value),
+        tipo_cuenta_id: tipoCuentaSelect.value,
         precio_tienda: parseFloat(precioTiendaInput.value),
         precio_publico: parseFloat(precioPublicoInput.value),
         whatsapp: whatsappInput.value,
